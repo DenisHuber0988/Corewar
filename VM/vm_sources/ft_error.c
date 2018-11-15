@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vm_error.c                                         :+:      :+:    :+:   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuber <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dhuber <dhuber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 14:57:44 by dhuber            #+#    #+#             */
-/*   Updated: 2018/07/23 16:46:35 by dhuber           ###   ########.fr       */
+/*   Updated: 2018/10/04 14:47:52 by dhuber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../vm_includes/virtual_machine.h"
 
-static void		ft_free(t_vm *vm)
-{
-	(void)vm;
-}
+/*
+**	Check the extension of the file.
+**	If it's invalid it quit the program and print an error.
+*/
 
 void			valid_extension(t_vm *vm, char *av)
 {
@@ -29,22 +29,18 @@ void			valid_extension(t_vm *vm, char *av)
 			if (read(fd, (void*)av, 0) != -1)
 				vm->nbr_players++;
 			else
-			{
-				if (close(fd) == -1)
-					vm_error(vm, "Couldn't close the file.", "", 1);
 				vm_error(vm, "Can't read the file -> ", av, 1);
-			}
 		}
 		else
-		{
-			if (close(fd) == -1)
-				vm_error(vm, "Couldn't close the file.", "", 1);
 			vm_error(vm, "Invalid file -> ", av, 1);
-		}
 	}
 	else
 		vm_error(vm, "Incorrect extension -> ", av, 1);
 }
+
+/*
+**	Check if the flag if valid or not.
+*/
 
 void			unknown_instruction(t_vm *vm, char *av, char *next)
 {
@@ -60,8 +56,13 @@ void			unknown_instruction(t_vm *vm, char *av, char *next)
 		vm_error(vm, "Unknown instruction -> ", av, 1);
 }
 
+/*
+**	Print the Error/Usage for the user.
+*/
+
 void			vm_error(t_vm *vm, char *msg, char *type, int n)
 {
+	(void)vm;
 	if (n)
 		ft_putstr("Error : ");
 	else
@@ -71,6 +72,5 @@ void			vm_error(t_vm *vm, char *msg, char *type, int n)
 		ft_printf("[%s]\n", type);
 	else
 		ft_putchar('\n');
-	ft_free(vm);
 	exit(1);
 }
